@@ -4,4 +4,4 @@ def dl3(c,d):
     return a+b+c+d
 
 t = dl3(3,4)
-print(t)using data process
+print(t)
