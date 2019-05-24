@@ -5,4 +5,3 @@ def dl3(c,d):
 
 t = dl3(3,4)
 print(t)
-f = 111
