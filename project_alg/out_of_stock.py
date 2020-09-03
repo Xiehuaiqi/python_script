@@ -47,6 +47,28 @@ class out_of_stock(object):
             local_empty.append({box[i][0],box[i][1],box[i][2],box[i][3],conf[i],cls[i]})
         return local_empty
 
+    def detect(self,imgfile):
+        origimg = cv2.imread(imgfile)
+        img = self.preprocess(origimg)
+
+        img = img.astype(np.float32)
+        img = img.transpose((2, 0, 1))
+
+        self.net.blobs['data'].data[...] = img
+        out = self.net.forward()
+        box, conf, cls = self.postprocess(origimg, out)
+        print(box,conf,cls)
+        n = len(conf)
+        print(n)
+        local_empty = []
+        for i in range(len(box)):
+            p1 = (box[i][0], box[i][1])
+            p2 = (box[i][2], box[i][3])
+            cv2.rectangle(origimg, p1, p2, (0, 255, 0), 2)
+            p3 = (max(p1[0], 15), max(p1[1], 15))
+            local_empty.append({box[i][0],box[i][1],box[i][2],box[i][3],conf[i],cls[i]})
+        return local_empty
+
 
 if __name__ == '__main__':
     t = out_of_stock()

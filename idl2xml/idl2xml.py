@@ -92,5 +92,5 @@ for line in lines:
                 # sys.exit()
         tree.write(goal_path+name[0]+".xml")
 
-print num
-print len(lines)
+print(num)
+print(len(lines))

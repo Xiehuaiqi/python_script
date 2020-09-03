@@ -88,7 +88,7 @@ def instance2xml_base(anno, bbox_type='xyxy'):
     )
     for index, bbox in enumerate(anno['bbox']):
         bbox = [float(x) for x in bbox]
-        print bbox_type
+        print(bbox_type)
         if bbox_type == 'xyxy':
             xmin, ymin, w, h = bbox
             xmax = xmin + w
