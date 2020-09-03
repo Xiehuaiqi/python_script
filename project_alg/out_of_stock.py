@@ -25,7 +25,7 @@ class out_of_stock(object):
         conf = out['detection_out'][0, 0, :, 2]
         return (box.astype(np.int32), conf, cls)
 
-    def detect(self,imgfile):
+    def detect_small(self,imgfile):
         origimg = cv2.imread(imgfile)
         img = self.preprocess(origimg)
 
@@ -47,7 +47,7 @@ class out_of_stock(object):
             local_empty.append({box[i][0],box[i][1],box[i][2],box[i][3],conf[i],cls[i]})
         return local_empty
 
-    def detect(self,imgfile):
+    def detect_all(self,imgfile):
         origimg = cv2.imread(imgfile)
         img = self.preprocess(origimg)
 
