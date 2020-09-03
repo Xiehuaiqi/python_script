@@ -26,12 +26,14 @@ class out_of_stock(object):
         conf = out['detection_out'][0, 0, :, 2]
         return (box.astype(np.int32), conf, cls)
 
-    def detect_all(self, img_up, img_mid, img_down, mid_overlap=0, down_overlap=0, mid_offset=0, down_offset=0):
+    def detect_all(self, img_up, img_mid, img_down, up_overlap=0, down_overlap=0, mid_offset=0, down_offset=0):
 
         whole_img = cv2.imread()
         img_all = [img_up, img_mid, img_down]
+        # 单个图像高度
+        hight = img_up.shape[0]
         result_all = []
-        #loc为上中下相机位置，origimg为相机参数
+        # loc为上中下相机位置，origimg为图像矩阵
         for loc, origimg in enumerate(img_all):
             img = self.preprocess(origimg)
 
@@ -46,8 +48,18 @@ class out_of_stock(object):
             for i in range(n):
                 p1 = (box[i][0], box[i][1])
                 p2 = (box[i][2], box[i][3])
+                # 类别为中部图像时作纵向重叠和左右误差偏移坐标结果
                 if loc == 1:
-                    box[i][0] +=
+                    box[i][0] += hight - up_overlap - mid_offset
+                    box[i][1] += hight - up_overlap - mid_offset
+                    box[i][2] += hight - up_overlap - mid_offset
+                    box[i][3] += hight - up_overlap - mid_offset
+                # 类别为下部图像时作纵向重叠和左右误差偏移坐标结果
+                elif loc == 2:
+                    box[i][0] += 2 * hight - up_overlap - down_overlap - down_offset
+                    box[i][1] += 2 * hight - up_overlap - down_overlap - down_offset
+                    box[i][2] += 2 * hight - up_overlap - down_overlap - down_offset
+                    box[i][3] += 2 * hight - up_overlap - down_overlap - down_offset
                 cv2.rectangle(origimg, p1, p2, (0, 255, 0), 2)
                 local_empty.append({box[i][0], box[i][1], box[i][2], box[i][3], conf[i], cls[i]})
                 # 可视化
